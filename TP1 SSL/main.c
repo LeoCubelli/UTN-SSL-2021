@@ -6,4 +6,5 @@
 
 int main(void) {
 	get_token();
+	return EXIT_SUCCESS;
 }
