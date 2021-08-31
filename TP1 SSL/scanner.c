@@ -1,35 +1,47 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
 #include "scanner.h"
 
-void get_token(void) {
-	int cadena = 0;
-	char caracter;
-	caracter = getchar();
+enum tipo_token get_token(char *buffer) {
+    int i = 0;
+    int cadena = 0;
+    char caracter = getchar();
 
-	while (caracter != EOF) {
-		if(caracter == ',') {
-			printf("Separador: ,\n");
-			caracter = getchar();
-		} 
-		if(isspace(caracter)) {
-			caracter = getchar();
-		}
-		if (!isspace(caracter) && caracter != ',' && caracter != EOF) {
-			printf("Cadena: ");
-		}
+    while (caracter != EOF) {
+        if(caracter == ',') {
+            buffer[i] = caracter;
+            return SEPARADOR;
+        }
 
-		while (!isspace(caracter) && caracter != ',' && caracter != EOF) {
-			cadena=1;
-			printf("%c", caracter);
-			caracter = getchar();
-		}
-		if (cadena == 1 ) {
-			printf("\n");
-			cadena=0;
-		}	
-	}
-	printf("Fin De Texto: \n");
+        if(isspace(caracter)) {
+            caracter = getchar();
+        }
+
+        if (es_cadena(caracter)==1) {
+            while (es_cadena(caracter)) {
+                buffer[i] = caracter;
+                i++;
+                caracter = getchar();
+            }
+            ungetc(caracter, stdin);
+            buffer[i++] = '\0';
+            return CADENA;
+        }
+
+    }
+    return FDT;
+}
+
+int es_cadena(char caracter) {
+    if (!isspace(caracter) && caracter != ',' && caracter != EOF) {
+		return 1;
+	} else {
+        return 0;
+    }
+}
+
+void limpiar_buffer(char *buffer, int tamanio) {
+    for (int i = 0; i <= tamanio; i++) {
+        buffer[i] = '\0';
+    }
 }

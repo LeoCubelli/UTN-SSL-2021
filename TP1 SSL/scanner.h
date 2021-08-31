@@ -1,4 +1,9 @@
-#include<stdio.h>
-#include<stdlib.h>
+enum tipo_token {
+    CADENA,
+    SEPARADOR,
+    FDT
+};
 
-void get_token(void);
+enum tipo_token get_token(char *buffer);
+void limpiar_buffer(char *buffer, int tamanio);
+int es_cadena(char caracter);
